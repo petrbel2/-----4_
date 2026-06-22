@@ -75,7 +75,6 @@ template <typename T> class LazySequence {
             int finite_part);
         T reduce(T (*function)(const T &left, const T &right), const T &initial);
         
-        // Выкинуть ошибку (deprecated методы)
         Sequence<T> *get_subsequence(int start_index, int end_index) const;
         Sequence<T> *concat(const Sequence<T> &other) const;
         Sequence<T> *map(T (*function)(const T &item)) const;
