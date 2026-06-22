@@ -93,7 +93,6 @@ class Ordinal {
             return Ordinal(omega_count, finite_part + other.finite_part);
         }
 
-        // Определено, когда this >= other
 
         Ordinal operator-(const Ordinal& other) const {
             if (omega_count == 0 && other.omega_count > 0) {

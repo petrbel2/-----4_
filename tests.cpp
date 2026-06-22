@@ -24,7 +24,6 @@ void require_near(double actual, double expected, const std::string &message) {
     require(std::fabs(actual - expected) < 1e-9, message);
 }
 
-// do while нужен для подставновки
 #define REQUIRE_THROWS(ExceptionType, message, expression) \
     do {                                                   \
         tests_run++;                                       \

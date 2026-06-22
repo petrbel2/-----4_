@@ -8,10 +8,10 @@
 template <typename T> class LazyCache {
     private:
         DynamicArray<T> buffer;
-        int capacity; // Сколько максимум хранить
-        int count; // Сколько по факту
+        int capacity; 
+        int count; 
         int first_index;
-        int first_physical_index; // 6 1 2 3 5
+        int first_physical_index;
 
         int get_physical_index(int local_index) const;
         void ensure_unlimited_capacity();

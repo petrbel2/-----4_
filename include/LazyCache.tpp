@@ -30,10 +30,6 @@ template <typename T> LazyCache<T>::LazyCache(const Sequence<T> &source, int cap
 
 template <typename T> int LazyCache<T>::get_physical_index(int local_index) const {
 
-    // Я реализовал кольцевой кэш, он является эффективной безопасной реализацией
-    // То есть когда кэш переполняется, то мы записываем новый элемент в качестве нулевого и так далее
-    // То есть идём по кругу
-    // Я тут мог немного неправильно выразить свои мысли, на сдаче спросите, если что-то непонятно
 
     if (local_index < 0 || local_index >= count) {
         throw std::out_of_range("Local index out of range");
@@ -43,10 +39,6 @@ template <typename T> int LazyCache<T>::get_physical_index(int local_index) cons
 }
 
 template <typename T> void LazyCache<T>::ensure_unlimited_capacity() { 
-/* Функция для режима capacity = 0, т.е. мы считаем, что у кэша неограниченный размер 
-и он нужен только для сохранения схожего интерфейса 
-
-Если считаете, что это не уместно, то этот режим можно и убрать*/
 
     if (capacity != 0) {
         return;
