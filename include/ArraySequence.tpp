@@ -2,27 +2,6 @@
 
 #include <stdexcept>
 
-template <typename T> ArraySequence<T>::ArraySequence() : items(), count(0) {}
-
-template <typename T> ArraySequence<T>::ArraySequence(const T *items, int count)
-    : items(items, count), count(count) {}
-
-template <typename T> ArraySequence<T>::ArraySequence(ArraySequence<T> &other)
-    : items(other.items), count(other.count) {}
-
-template <typename T> ArraySequence<T>::ArraySequence(const ArraySequence<T> &other)
-    : items(other.items), count(other.count) {}
-
-template <typename T> ArraySequence<T> &ArraySequence<T>::operator=(const ArraySequence<T> &other) {
-    if (this == &other) {
-        return *this;
-    }
-
-    items = other.items;
-    count = other.count;
-    return *this;
-}
-
 template <typename T> const T& ArraySequence<T>::get_first() const {
     if (count == 0) {
         throw std::out_of_range("Sequence is empty");

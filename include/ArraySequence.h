@@ -20,11 +20,25 @@ template <typename T> class ArraySequence : public Sequence<T> {
     public:
         virtual ArraySequence<T> *Empty() const override = 0;
 
-        ArraySequence();
-        ArraySequence(const T *items, int count);
-        ArraySequence(ArraySequence<T> &other);
-        ArraySequence(const ArraySequence<T> &other);
-        ArraySequence<T> &operator=(const ArraySequence<T> &other);
+        ArraySequence() : items(), count(0) {}
+
+        ArraySequence(const T *items, int count)
+            : items(items, count), count(count) {}
+
+        ArraySequence(ArraySequence<T> &other)
+            : items(other.items), count(other.count) {}
+
+        ArraySequence(const ArraySequence<T> &other)
+            : items(other.items), count(other.count) {}
+
+        ArraySequence<T> &operator=(const ArraySequence<T> &other) {
+            if (this == &other) {
+                return *this;
+            }
+            items = other.items;
+            count = other.count;
+            return *this;
+            }
 
         const T& get_first() const override;
         const T& get_last() const override;
