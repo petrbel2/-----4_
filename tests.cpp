@@ -1,7 +1,7 @@
-#include "include/DynamicSequence.hpp"
-#include "include/LazySequence.hpp"
-#include "include/OnlineStatistics.hpp"
-#include "include/Stream.hpp"
+#include "DynamicSequence.hpp"
+#include "LazySequence.hpp"
+#include "OnlineStatistics.hpp"
+#include "Stream.hpp"
 
 #include <cmath>
 #include <cstdio>
