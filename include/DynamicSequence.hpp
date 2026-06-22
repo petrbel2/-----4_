@@ -5,33 +5,33 @@
 #include "IEnumerator.hpp"
 #include <stdexcept>
 
-template <typename T> class ArraySequence : public Sequence<T> {
+template <typename T> class DynamicSequence : public Sequence<T> {
     protected:
         DynamicArray<T> items;
         int count;
 
-        virtual ArraySequence<T> *Instance() override = 0;
-        virtual ArraySequence<T> *Clone() const override = 0;
+        virtual DynamicSequence<T> *Instance() override = 0;
+        virtual DynamicSequence<T> *Clone() const override = 0;
 
         void append_to_current(const T &item) override;
         void reserve(int capacity) override;
         void reallocate(int required);
 
     public:
-        virtual ArraySequence<T> *Empty() const override = 0;
+        virtual DynamicSequence<T> *Empty() const override = 0;
 
-        ArraySequence() : items(), count(0) {}
+        DynamicSequence() : items(), count(0) {}
 
-        ArraySequence(const T *items, int count)
+        DynamicSequence(const T *items, int count)
             : items(items, count), count(count) {}
 
-        ArraySequence(ArraySequence<T> &other)
+        DynamicSequence(DynamicSequence<T> &other)
             : items(other.items), count(other.count) {}
 
-        ArraySequence(const ArraySequence<T> &other)
+        DynamicSequence(const DynamicSequence<T> &other)
             : items(other.items), count(other.count) {}
 
-        ArraySequence<T> &operator=(const ArraySequence<T> &other) {
+        DynamicSequence<T> &operator=(const DynamicSequence<T> &other) {
             if (this == &other) {
                 return *this;
             }
@@ -92,46 +92,46 @@ template <typename T> class ArraySequence : public Sequence<T> {
         }
 };
 
-template <typename T> class MutableArraySequence : public ArraySequence<T> {
+template <typename T> class MutableDynamicSequence : public DynamicSequence<T> {
     protected:
-        ArraySequence<T> *Instance() override {
+        DynamicSequence<T> *Instance() override {
             return this;
         }
 
-        ArraySequence<T> *Clone() const override {
-            return new MutableArraySequence<T>(*this);
+        DynamicSequence<T> *Clone() const override {
+            return new MutableDynamicSequence<T>(*this);
         }
 
     public:
-        ArraySequence<T> *Empty() const override {
-            return new MutableArraySequence<T>();
+        DynamicSequence<T> *Empty() const override {
+            return new MutableDynamicSequence<T>();
         }
 
-        MutableArraySequence() : ArraySequence<T>() {};
-        MutableArraySequence(const T *items, int count) : ArraySequence<T>(items, count) {};
-        MutableArraySequence(const ArraySequence<T> &other) : ArraySequence<T>(other) {};
+        MutableDynamicSequence() : DynamicSequence<T>() {};
+        MutableDynamicSequence(const T *items, int count) : DynamicSequence<T>(items, count) {};
+        MutableDynamicSequence(const DynamicSequence<T> &other) : DynamicSequence<T>(other) {};
 
         void set(int index, const T &value);
 };
 
-template <typename T> class ImmutableArraySequence : public ArraySequence<T> {
+template <typename T> class ImmutableDynamicSequence : public DynamicSequence<T> {
     protected:
-        ArraySequence<T> *Instance() override {
+        DynamicSequence<T> *Instance() override {
             return Clone();
         }
 
-        ArraySequence<T> *Clone() const override {
-            return new ImmutableArraySequence<T>(*this);
+        DynamicSequence<T> *Clone() const override {
+            return new ImmutableDynamicSequence<T>(*this);
         }
 
     public:
-        ArraySequence<T> *Empty() const override {
-            return new ImmutableArraySequence<T>();
+        DynamicSequence<T> *Empty() const override {
+            return new ImmutableDynamicSequence<T>();
         }
 
-        ImmutableArraySequence() : ArraySequence<T>() {};
-        ImmutableArraySequence(const T *items, int count) : ArraySequence<T>(items, count) {};
-        ImmutableArraySequence(const ArraySequence<T> &other) : ArraySequence<T>(other) {};
+        ImmutableDynamicSequence() : DynamicSequence<T>() {};
+        ImmutableDynamicSequence(const T *items, int count) : DynamicSequence<T>(items, count) {};
+        ImmutableDynamicSequence(const DynamicSequence<T> &other) : DynamicSequence<T>(other) {};
 };
 
-#include "ArraySequence.tpp"
+#include "DynamicSequence.tpp"

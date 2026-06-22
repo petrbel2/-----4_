@@ -1,4 +1,4 @@
-#include "include/ArraySequence.hpp"
+#include "include/DynamicSequence.hpp"
 #include "include/LazySequence.hpp"
 #include "include/OnlineStatistics.hpp"
 #include "include/Stream.hpp"
@@ -69,7 +69,7 @@ void run_manual_mode() {
         throw std::invalid_argument("Count must be a non-negative integer");
     }
 
-    MutableArraySequence<int> values;
+    MutableDynamicSequence<int> values;
     for (int index = 0; index < count; index++) {
         int value = 0;
         std::cout << "value[" << index << "] = ";
@@ -86,7 +86,7 @@ void run_manual_mode() {
 
 void run_prepared_mode() {
     int prepared[] = {7, 1, 9, 3, 3, 10, -2, 8};
-    MutableArraySequence<int> values(prepared, 8);
+    MutableDynamicSequence<int> values(prepared, 8);
     SequenceReadStream<int> stream(values);
     process_stream(stream);
 }
@@ -129,14 +129,14 @@ void run_fibonacci_generator() {
     }
     if (count == 1) {
         int first[] = {0};
-        MutableArraySequence<int> initial(first, 1);
+        MutableDynamicSequence<int> initial(first, 1);
         LazySequence<int> generated(initial);
         process_lazy_sequence(generated);
         return;
     }
 
     int first_two[] = {0, 1};
-    MutableArraySequence<int> initial(first_two, 2);
+    MutableDynamicSequence<int> initial(first_two, 2);
     LazySequence<int> generated(initial, fibonacci_rule, Ordinal::finite(count));
     process_lazy_sequence(generated);
 }
@@ -205,13 +205,13 @@ int read_int(const char *prompt) {
     return value;
 }
 
-MutableArraySequence<int> read_array_sequence() {
+MutableDynamicSequence<int> read_array_sequence() {
     int count = read_int("How many values? ");
     if (count < 0) {
         throw std::invalid_argument("Count must be a non-negative integer");
     }
 
-    MutableArraySequence<int> values;
+    MutableDynamicSequence<int> values;
     for (int index = 0; index < count; index++) {
         std::cout << "value[" << index << "] = ";
         int value = 0;
@@ -244,7 +244,7 @@ LazySequence<int> *read_lazy_sequence() {
     }
 
     if (choice == 1) {
-        MutableArraySequence<int> values = read_array_sequence();
+        MutableDynamicSequence<int> values = read_array_sequence();
         return new LazySequence<int>(values);
     }
     if (choice == 2) {
@@ -279,14 +279,14 @@ LazySequence<int> *read_lazy_sequence() {
             }
             if (count == 1) {
                 int first[] = {0};
-                MutableArraySequence<int> initial(first, 1);
+                MutableDynamicSequence<int> initial(first, 1);
                 return new LazySequence<int>(initial);
             }
             length = Ordinal::finite(count);
         }
 
         int first_two[] = {0, 1};
-        MutableArraySequence<int> initial(first_two, 2);
+        MutableDynamicSequence<int> initial(first_two, 2);
         return new LazySequence<int>(initial, fibonacci_rule, length);
     }
 
@@ -314,7 +314,7 @@ void print_lazy_prefix(LazySequence<int> &sequence, int requested_count) {
 }
 
 LazySequence<int> *read_entered_finite_lazy_sequence() {
-    MutableArraySequence<int> values = read_array_sequence();
+    MutableDynamicSequence<int> values = read_array_sequence();
     return new LazySequence<int>(values);
 }
 

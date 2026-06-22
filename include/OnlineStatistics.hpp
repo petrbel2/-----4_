@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ArraySequence.hpp"
+#include "DynamicSequence.hpp"
 
 #include <stdexcept>
 
@@ -11,7 +11,7 @@ template <typename T> class OnlineStatistics {
         T min_value;
         T max_value;
         bool has_items;
-        MutableArraySequence<T> sorted_items;
+        MutableDynamicSequence<T> sorted_items;
 
         int find_insert_index(const T &value) const;
     

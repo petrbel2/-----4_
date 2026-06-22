@@ -1,4 +1,4 @@
-#include "include/ArraySequence.hpp"
+#include "include/DynamicSequence.hpp"
 #include "include/LazySequence.hpp"
 #include "include/OnlineStatistics.hpp"
 #include "include/Stream.hpp"
@@ -123,7 +123,7 @@ void test_online_statistics() {
 
 void test_sequence_read_stream() {
     int raw[] = {4, 8, 15};
-    MutableArraySequence<int> sequence(raw, 3);
+    MutableDynamicSequence<int> sequence(raw, 3);
     SequenceReadStream<int> stream(sequence);
 
     require(stream.is_can_go_to_index(), "sequence read can seek");
@@ -153,7 +153,7 @@ void test_sequence_read_stream() {
 }
 
 void test_sequence_write_stream() {
-    MutableArraySequence<int> sequence;
+    MutableDynamicSequence<int> sequence;
     SequenceWriteStream<int> stream(sequence);
 
     require(stream.is_can_go_to_index(), "sequence write can seek");
@@ -231,7 +231,7 @@ void test_lazy_sequence() {
     delete first_three;
 
     int start[] = {0, 1};
-    MutableArraySequence<int> initial(start, 2);
+    MutableDynamicSequence<int> initial(start, 2);
     LazySequence<int> fibonacci(initial, fibonacci_rule, Ordinal::finite(7));
     require(fibonacci.get(6) == 8, "lazy recurrent rule");
 }
@@ -247,7 +247,7 @@ void test_lazy_sequence_accessors_and_boundaries() {
     REQUIRE_THROWS(std::invalid_argument, "negative take throws", empty.take(-1));
 
     int raw[] = {3, 1, 4};
-    MutableArraySequence<int> values(raw, 3);
+    MutableDynamicSequence<int> values(raw, 3);
     LazySequence<int> finite(values);
     require(finite.get_first() == 3, "finite get_first");
     require(finite.get_last() == 4, "finite get_last");
@@ -289,7 +289,7 @@ void test_lazy_sequence_accessors_and_boundaries() {
     REQUIRE_THROWS(std::out_of_range, "remove beyond end throws", finite.remove(3));
 
     int single_raw[] = {99};
-    MutableArraySequence<int> single_values(single_raw, 1);
+    MutableDynamicSequence<int> single_values(single_raw, 1);
     LazySequence<int> single(single_values);
     LazySequence<int> *removed_single = single.remove(0);
     require(removed_single->get_length().value() == 0, "remove single leaves empty");
@@ -456,8 +456,8 @@ void test_lazy_sequence_copy_assignment_and_enumerator() {
 
     int left_raw[] = {1, 2};
     int right_raw[] = {3};
-    MutableArraySequence<int> left_values(left_raw, 2);
-    MutableArraySequence<int> right_values(right_raw, 1);
+    MutableDynamicSequence<int> left_values(left_raw, 2);
+    MutableDynamicSequence<int> right_values(right_raw, 1);
     LazySequence<int> left(left_values);
     LazySequence<int> right(right_values);
     LazySequence<int> *joined = left.concat(right);
