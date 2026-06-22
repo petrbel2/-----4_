@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Generator.h"
+#include "Generator.hpp"
 
 // Generator
 template <typename T> T Generator<T>::generate(const Ordinal &index,

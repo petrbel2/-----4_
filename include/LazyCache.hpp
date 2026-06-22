@@ -1,7 +1,7 @@
 #pragma once
 
-#include "DynamicArray.h"
-#include "Sequence.h"
+#include "DynamicArray.hpp"
+#include "Sequence.hpp"
 
 #include <stdexcept>
 

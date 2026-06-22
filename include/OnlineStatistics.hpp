@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ArraySequence.h"
+#include "ArraySequence.hpp"
 
 #include <stdexcept>
 

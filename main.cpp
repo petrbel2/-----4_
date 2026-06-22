@@ -1,7 +1,7 @@
-#include "include/ArraySequence.h"
-#include "include/LazySequence.h"
-#include "include/OnlineStatistics.h"
-#include "include/Stream.h"
+#include "include/ArraySequence.hpp"
+#include "include/LazySequence.hpp"
+#include "include/OnlineStatistics.hpp"
+#include "include/Stream.hpp"
 
 #include <iomanip>
 #include <iostream>

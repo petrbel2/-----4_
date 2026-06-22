@@ -1,7 +1,7 @@
 #pragma once
 
-#include "LazySequence.h"
-#include "Sequence.h"
+#include "LazySequence.hpp"
+#include "Sequence.hpp"
 
 #include <fstream>
 #include <stdexcept>

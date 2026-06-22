@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Sequence.h"
-#include "DynamicArray.h"
-#include "IEnumerator.h"
+#include "Sequence.hpp"
+#include "DynamicArray.hpp"
+#include "IEnumerator.hpp"
 #include <stdexcept>
 
 template <typename T> class ArraySequence : public Sequence<T> {

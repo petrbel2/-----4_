@@ -1,6 +1,6 @@
 #pragma once
 
-#include "LazyCache.h"
+#include "LazyCache.hpp"
 
 template <typename T> LazyCache<T>::LazyCache(int capacity)
     : buffer(capacity),

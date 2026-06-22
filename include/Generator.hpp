@@ -1,7 +1,7 @@
 #pragma once
 
-#include "LazyCache.h"
-#include "Ordinal.h"
+#include "LazyCache.hpp"
+#include "Ordinal.hpp"
 
 template <typename T> class LazySequence;
 

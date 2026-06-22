@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Generator.h"
-#include "IEnumerator.h"
-#include "LazyCache.h"
-#include "Option.h"
-#include "Ordinal.h"
-#include "Sequence.h"
+#include "Generator.hpp"
+#include "IEnumerator.hpp"
+#include "LazyCache.hpp"
+#include "Option.hpp"
+#include "Ordinal.hpp"
+#include "Sequence.hpp"
 
 #include <stdexcept>
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "IEnumerator.h"
-#include "Option.h"
+#include "IEnumerator.hpp"
+#include "Option.hpp"
 
 template <typename T> class Sequence {
     protected:
