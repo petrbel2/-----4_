@@ -241,9 +241,6 @@ void test_lazy_sequence_accessors_and_boundaries() {
     require(empty.get_length().is_finite(), "empty finite length");
     require(empty.get_length().value() == 0, "empty length value");
     require(empty.get_materialized_count() == 0, "empty materialized count");
-    // require_no_value(empty.try_get_first(), "empty try_get_first");
-    // require_no_value(empty.try_get_last(), "empty try_get_last");
-    // require_no_value(empty.try_get(0), "empty try_get index");
     REQUIRE_THROWS(std::out_of_range, "empty get_first throws", empty.get_first());
     REQUIRE_THROWS(std::out_of_range, "empty get_last throws", empty.get_last());
     REQUIRE_THROWS(std::out_of_range, "empty get throws", empty.get(0));
@@ -254,11 +251,6 @@ void test_lazy_sequence_accessors_and_boundaries() {
     LazySequence<int> finite(values);
     require(finite.get_first() == 3, "finite get_first");
     require(finite.get_last() == 4, "finite get_last");
-    // require_value(finite.try_get_first(), 3, "finite try_get_first");
-    // require_value(finite.try_get_last(), 4, "finite try_get_last");
-    // require_value(finite.try_get(1), 1, "finite try_get");
-    // require_no_value(finite.try_get(-1), "finite try_get negative");
-    // require_no_value(finite.try_get(3), "finite try_get out of range");
     require(finite.is_materialized(2), "finite sequence from source is materialized");
 
     LazySequence<int> *sub = finite.get_subsequence(1, 2);
