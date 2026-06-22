@@ -9,7 +9,7 @@ template <typename T> class LazyCache {
     private:
         DynamicArray<T> buffer;
         int capacity; 
-        int count; 
+        int elem_number; 
         int first_index;
         int first_physical_index;
 
