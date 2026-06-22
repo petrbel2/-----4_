@@ -44,10 +44,6 @@ template <typename T> class LazySequence {
         const T &get(const Ordinal &index);
         const T &get(int omega_count, int finite_part);
 
-        // Option<T> try_get_first(); // Убрать
-        // Option<T> try_get_last();
-        // Option<T> try_get(int index);
-
         Ordinal get_length() const;
         int get_materialized_count() const;
         int get_cache_limit() const;
