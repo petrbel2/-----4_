@@ -8,7 +8,7 @@ template <typename T> class Sequence {
         virtual Sequence<T> *Instance() = 0;
         virtual Sequence<T> *Clone() const = 0;
         virtual void append_to_current(const T &item) = 0;
-        virtual void reserve(int) {} // У массива выделяем память, ListSequence это не нужно
+        virtual void reserve(int) {} 
 
     public:
         virtual ~Sequence() = default;

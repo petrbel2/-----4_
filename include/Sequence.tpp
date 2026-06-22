@@ -9,17 +9,15 @@ template <typename T> Sequence<T> *Sequence<T>::get_subsequence(int start_index,
         throw std::out_of_range("Index out of range");
     }
 
-    Sequence<T> *result = Empty(); // Создаём пустой ArraySequence
-    result->reserve(end_index - start_index + 1); // Поскольку его длина 0, то цикл копирования не пройдёт
-    
-    /* Поскольку (new_size < size) при size = 0, требует чтобы длина новой последовательности
-    была отрицательной, что невозможно ибо выдаст исключение */
+    Sequence<T> *result = Empty();
+    result->reserve(end_index - start_index + 1);
+
     
     IEnumerator<T> *enumerator = get_enumerator();
     int index = 0;
     while (enumerator->move_next() && index <= end_index) {
         if (index >= start_index) {
-            result->append_to_current(enumerator->get_curr());  // Единственное место где выполняется копирование
+            result->append_to_current(enumerator->get_curr()); 
         }
         index++;
     }
@@ -30,7 +28,6 @@ template <typename T> Sequence<T> *Sequence<T>::get_subsequence(int start_index,
 
 template <typename T> Sequence<T> *Sequence<T>::concat(const Sequence<T> &other) {
 
-    // Квадратичного перебора смог избежать, унифицировав через Enumerator
 
     Sequence<T> *result = Instance();
     result->reserve(result->get_length() + other.get_length());

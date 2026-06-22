@@ -65,7 +65,6 @@ template <typename T> LazySequence<T> &LazySequence<T>::operator=(const LazySequ
     return *this;
 }
 
-// Небольшие util функции
 
 template <typename T> LazySequence<T>::~LazySequence() {
     delete generator;
@@ -148,35 +147,6 @@ template <typename T> const T &LazySequence<T>::get(int omega_count, int finite_
 }
 
 
-/*
-template <typename T> Option<T> LazySequence<T>::try_get_first() {
-    return try_get(0);
-}
-
-
-
-template <typename T> Option<T> LazySequence<T>::try_get_last() {
-    if (length.is_infinite() || length.value() == 0) {
-        return Option<T>();
-    }
-    return try_get(static_cast<int>(length.value() - 1));
-}
-
-
-template <typename T> Option<T> LazySequence<T>::try_get(int index) {
-    if (index < 0) {
-        return Option<T>();
-    }
-
-    try {
-        return Option<T>(get(index));
-    } catch (const std::exception &error) {
-        return Option<T>();
-    }
-}
-
-*/
-
 template <typename T> Ordinal LazySequence<T>::get_length() const {
     return length;
 }
@@ -226,7 +196,6 @@ LazySequence<T> *LazySequence<T>::get_subsequence(const Ordinal &start_index,
         end_index - start_index + Ordinal::finite(1));
 }
 
-// то же самое, но для ручного задания Ординалов
 
 template <typename T>
 LazySequence<T> *LazySequence<T>::get_subsequence(int start_omega_count, int start_finite_part,
@@ -249,7 +218,6 @@ template <typename T> LazySequence<T> *LazySequence<T>::take(int count) {
     return get_subsequence(0, count - 1);
 }
 
-// Просто возвращаем новые LazySequence с генераторами
 
 template <typename T> LazySequence<T> *LazySequence<T>::append(const T &item) {
     return new LazySequence<T>(new AppendGenerator<T>(*this, item),
@@ -261,7 +229,6 @@ template <typename T> LazySequence<T> *LazySequence<T>::prepend(const T &item) {
         Ordinal::finite(1) + length);
 }
 
-// Просто удобная обёртка над insert
 
 template <typename T> LazySequence<T> *LazySequence<T>::insert(const T &item, int index) {
     if (index < 0) {
@@ -278,24 +245,20 @@ LazySequence<T> *LazySequence<T>::insert(const T &item, const Ordinal &index) {
 
     Ordinal new_length = length;
     if (length.is_finite() || index.get_omega_count() == length.get_omega_count()) { 
-        // Всё просто если вставляем в конец, то мы должны изменить длину, чтобы избежать ошибки
         new_length = length + Ordinal::finite(1);
-    } else if (index.is_finite()) { // Вставляем финитный, то есть конечный индекс
-        new_length = Ordinal::finite(1) + length; // Если length не omega, 
-        //то просто обычное сложение, а вот если omega, то останется omega
+    } else if (index.is_finite()) {
+        new_length = Ordinal::finite(1) + length; 
     }
 
     return new LazySequence<T>(new InsertGenerator<T>(*this, item, index), new_length);
 }
 
-// Обёртка для создания Ordinal index прямо в функции
 
 template <typename T>
 LazySequence<T> *LazySequence<T>::insert(const T &item, int omega_count, int finite_part) {
     return insert(item, Ordinal(omega_count, finite_part));
 }
 
-// int обёртка над remove
 
 template <typename T> LazySequence<T> *LazySequence<T>::remove(int index) {
     if (index < 0) {
@@ -311,8 +274,7 @@ template <typename T> LazySequence<T> *LazySequence<T>::remove(const Ordinal &in
 
     if (length.is_finite()) {
         if (length.value() == 1) {
-            return new LazySequence<T>(); // нужен, чтобы не передавать генератор,
-            // Поскольку последовательность итак пустая
+            return new LazySequence<T>();
         }
 
         return new LazySequence<T>(new RemoveGenerator<T>(*this, index),
@@ -321,21 +283,18 @@ template <typename T> LazySequence<T> *LazySequence<T>::remove(const Ordinal &in
 
     Ordinal new_length = length;
     if (index.get_omega_count() == length.get_omega_count()) { 
-        // Если удаляем из последней подпоследовательности, то мы должны уменьшить длину
         new_length = Ordinal(length.get_omega_count(), length.get_finite_part() - 1);
     }
 
     return new LazySequence<T>(new RemoveGenerator<T>(*this, index), new_length);
 }
 
-// Просто обёртка для ручного ввода Ordinal index
 
 template <typename T>
 LazySequence<T> *LazySequence<T>::remove(int omega_count, int finite_part) {
     return remove(Ordinal(omega_count, finite_part));
 }
 
-// Прочие функции
 
 template <typename T> LazySequence<T> *LazySequence<T>::concat(LazySequence<T> &other) {
     return new LazySequence<T>(new ConcatGenerator<T>(*this, other), length + other.length);
@@ -345,22 +304,9 @@ template <typename T> LazySequence<T> *LazySequence<T>::map(T (*function)(const 
     return new LazySequence<T>(new MapGenerator<T>(*this, function), length);
 }
 
-// Where (возвращаем последовательность с элементами, прошедшими через условие по запросу к ним)
-// То есть генерируем походу
-
-// Если подходящих элементов нет вообще, то мы получим вечный цикл
-// Как запретить это я не придумал, я думаю, что это невозможно физически (гипотетически
-// можно сделать лимит перебора, который бы принудительно сворчивал работу программу после 
-// прохода n элементов, но это чревато тем, что элемент может сущестовать, просто на
-// позиции n+C)
-
-// Встроенный поиск в первой подпоследовательности с нулевого элемента (полезно для простых LazySequence)
-
 template <typename T> LazySequence<T> *LazySequence<T>::where(bool (*predicate)(const T &item)) {
     return where(predicate, Ordinal::zero());
 }
-
-// То же самое, но можно выбрать индекс старта поиска. Индексы до не будут учитываться
 
 template <typename T>
 LazySequence<T> *LazySequence<T>::where(bool (*predicate)(const T &item), int start_index) {
@@ -370,10 +316,6 @@ LazySequence<T> *LazySequence<T>::where(bool (*predicate)(const T &item), int st
 
     return where(predicate, Ordinal::finite(start_index));
 }
-
-// То же самое, но можно выбрать индекс старта поиска. Но индекс ординальный. 
-// Это полезно, если нас интересует поиск, в других подпоследовательностях. 
-// Индексы до не будут учитываться
 
 template <typename T>
 LazySequence<T> *LazySequence<T>::where(bool (*predicate)(const T &item),
@@ -387,7 +329,6 @@ LazySequence<T> *LazySequence<T>::where(bool (*predicate)(const T &item),
     return new LazySequence<T>(where_generator, result_length);
 }
 
-// Функция, аналогичная верхней, но с ручным вводом Ординала
 
 template <typename T>
 LazySequence<T> *LazySequence<T>::where(bool (*predicate)(const T &item), int omega_count,
@@ -395,10 +336,6 @@ LazySequence<T> *LazySequence<T>::where(bool (*predicate)(const T &item), int om
     return where(predicate, Ordinal(omega_count, finite_part));
 }
 
-// reduce
-// По смыслу его не получится сделать на бесконечных последовательностях,
-// Так как суть функции в том, чтобы накапливать значение проходясь по последовательности
-// Функцией. А для omega последовательностей это приведёт к бесконечному перебору1ё
 
 template <typename T> T LazySequence<T>::reduce(T (*function)(const T &left, const T &right), const T &initial) {
     if (length.is_infinite()) {
@@ -411,8 +348,6 @@ template <typename T> T LazySequence<T>::reduce(T (*function)(const T &left, con
     }
     return accumulated;
 }
-
-// depricated функции
 
 template <typename T> Sequence<T> *LazySequence<T>::get_subsequence(int start_index,
     int end_index) const {
