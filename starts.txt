@@ -1,5 +1,7 @@
 g++ -std=c++17 -Wall -Wextra -Wpedantic -I. -Iinclude main.cpp -o main.exe
 .\main.exe
 
+'4','stream_input_sample.txt','0' | .\main.exe
+
 g++ -std=c++17 -Wall -Wextra -Wpedantic -I. -Iinclude tests.cpp -o tests.exe
 .\tests.exe
